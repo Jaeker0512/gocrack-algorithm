@@ -56,5 +56,31 @@
 #         self.right = right
 class Solution:
     def maxPathSum(self, root: TreeNode) -> int:
+        self.max_sum = float('-inf')
+    # 路径停在当前子树的根节点，收益：root.val
+    # 走入左子树，最大收益：root.val + dfs(root.left)
+    # 走入右子树，最大收益：root.val + dfs(root.right)
+    # 再次提醒: 一条从父节点延伸下来的路径，不能走入左子树又掉头走右子树，不能两头收益。
+    # 当遍历到null节点时，返回 0，收益为 0。
+    # 如果子树 dfs 返回负值，走入它，收益反减，该子树应被忽略，让它返回 0，如同砍掉
+        def dfs(root):
+            if not root:
+                return 0
+            # 注意！！！一个子树内部的路径，要包含当前子树的根节点（只是不必一定要从根节点出发的子树）
+            # 如果不包含，那还算什么属于当前子树的路径，而是当前子树的子树的内部路径。
+            # 所以，一个子树内部的最大路径和 = 左子树提供的最大路径和 + 根节点值 + 右子树提供的最大路径和。
+            # 即 dfs(root.left) + root.val + dfs(root.right);
+            l = dfs(root.left)
+            r = dfs(root.right)
+            current_max = l + r + root.val
+            self.max_sum = max(self.max_sum, current_max)
+            out_max = root.val + max(l , r)
+            if out_max < 0:
+                return 0
+            else:
+                return out_max
+        dfs(root)
+        return self.max_sum
+
 # @lc code=end
 
