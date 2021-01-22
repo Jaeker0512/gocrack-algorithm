@@ -72,10 +72,6 @@
 #         self.right = None
 
 class Solution:
-    def helper(self, node1, node2):
-        if node1.val != node2:
-            return False
-        return True
     def flipMatchVoyage(self, root: TreeNode, voyage: List[int]) -> List[int]:
         self.res = [] 
         self.idx = 0
@@ -85,7 +81,7 @@ class Solution:
                     self.res = [-1]
                     return
                 self.idx += 1
-                if self.idx < len(voyage) and root.left and root.left.val != voyage[self.idx]:
+                if root.left and root.left.val != voyage[self.idx]:
                     self.res.append(root.val)
                     dfs(root.right)
                     dfs(root.left)
@@ -93,8 +89,6 @@ class Solution:
                     dfs(root.left)
                     dfs(root.right)
         dfs(root)
-        if self.res and self.res[0] == -1:
-            self.res = [-1]
         return self.res
              
 # @lc code=end
