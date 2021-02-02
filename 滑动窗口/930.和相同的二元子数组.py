@@ -48,13 +48,13 @@ class Solution:
         prefix_sum = 0
         from collections import defaultdict
         sum_map = defaultdict(int)
-        sum_map[0] = 0
+        sum_map[0] = 1
         prefix_sum = 0
         for i in range(len(A)):
             prefix_sum += A[i]
+            if prefix_sum - S in sum_map:
+                res +=  sum_map[prefix_sum - S]
             sum_map[prefix_sum] += 1
-            if S - prefix_sum in sum_map:
-                res +=  sum_map[S - prefix_sum]
         return res
 # @lc code=end
 
