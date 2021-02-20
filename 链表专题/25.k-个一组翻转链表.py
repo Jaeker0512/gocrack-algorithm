@@ -47,23 +47,36 @@
 #         self.val = val
 #         self.next = next
 class Solution:
+    # 记得画图，采用4点法
+    # 当触发条件时dummy为p1，cur其实是p3
     def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        def reverse(head, b):
-            pre = None
-            cur = head
-            while cur != b:
-                # 留下联系方式
+        def reverse(p1, p4):
+            pre = p1
+            p2 = cur = p1.next
+            while cur != p4:
                 next = cur.next
-                # 修改指针
                 cur.next = pre
-                # 继续往下走
                 pre = cur
                 cur = next
-            return pre, head
+            p1.next = pre
+            p2.next = p4
+            return p2
+        
         if not head:
             return
-        
 
-        
+        dummy = ListNode(-1)
+        dummy.next = head
+        count = 0
+        cur = head
+        pre = dummy
+        while cur:
+            count += 1
+            if count % k == 0:
+                pre = reverse(pre, cur.next)
+                cur = pre.next
+            else:
+                cur = cur.next
+        return dummy.next
 # @lc code=end
 
