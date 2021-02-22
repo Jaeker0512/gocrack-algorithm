@@ -49,18 +49,23 @@
 class Solution:
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         track = []
+        used = [0 for _ in range(len(nums))]
         res = []
         def backtrack(nums, track):
             if len(track) == len(nums):
                 res.append(track.copy())
                 return
             for i in range(len(nums)):
-                if nums[i] in track:
+                if used[i]:
+                    continue
+                if i > 0 and nums[i] == nums[i-1] and not used[i-1]:
                     continue
                 track.append(nums[i])
+                used[i] = 1
                 backtrack(nums, track)
                 track.pop()
-        backtrack(nums, track)
+                used[i] = 0
+        backtrack(sorted(nums), track)
         return res
 # @lc code=end
 
