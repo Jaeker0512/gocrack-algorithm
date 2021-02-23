@@ -31,5 +31,30 @@
 # @lc code=start
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
+        res = []
+        track = []
+
+        def is_valid(string):
+            left, right = 0, len(string) - 1
+            while left < right:
+                if string[left] != string[right]:
+                    return False
+                left += 1
+                right -= 1
+            return True
+
+        def backtrack(start, s):
+            if start >= len(s):
+                res.append(track.copy())
+            for i in range(start, len(s)):
+                cur = s[start:i+1]
+                if not is_valid(cur):
+                    continue
+                track.append(cur)
+                backtrack(i+1, s)
+                track.pop()
+
+        backtrack(0, s)
+        return res
 # @lc code=end
 
