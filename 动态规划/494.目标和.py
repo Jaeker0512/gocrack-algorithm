@@ -66,27 +66,51 @@ class Solution:
         #     memo[(cur_sum, idx)] = ret1 + ret2
         #     return memo[(cur_sum, idx)]
         # return dp(0, 0)
-        ## dp table 解法
+        
+        ## dp table 解法1
         # 如何转化为01背包问题呢。
         # 假设加法的总和为x，那么减法对应的总和就是sum - x。
         # 所以我们要求的是 x - (sum - x) = S
         # x = (S + sum) / 2
         # 此时问题就转化为，装满容量为x背包，有几种方法。
+        # sum_nums = sum(nums)
+        # if (sum_nums + S) & 1 != 0 or sum_nums < S:
+        #     return 0
+        # target = int((sum_nums + S)/2)
+        # dp = [[0 for _ in range(target+1)] for _ in range(2)]
+
+        # for i in range(2):
+        #     dp[i][0] = 1
+
+        # for i in range(1, n+1):
+        #     for j in range(0, target+1):
+        #         if j-nums[i-1] < 0:
+        #             dp[1][j] = dp[0][j]
+        #         else:
+        #             dp[1][j]  = dp[0][j] + dp[0][j-nums[i-1]]
+        #     dp[0] = dp[1].copy()
+        # return dp[1][target]
+
+        ## dp table 解法2
+        # 如何转化为01背包问题呢。
+        # 假设加法的总和为x，那么减法对应的总和就是sum - x。
+        # 所以我们要求的是 x - (sum - x) = S
+        # x = (S + sum) / 2
+        # 此时问题就转化为，装满容量为x背包，有几种方法。
+        # 降维成一维
         sum_nums = sum(nums)
         if (sum_nums + S) & 1 != 0 or sum_nums < S:
             return 0
         target = int((sum_nums + S)/2)
-        dp = [[0 for _ in range(target+1)] for _ in range(n+1)]
-
-        for i in range(n+1):
-            dp[i][0] = 1
+        dp = [0 for _ in range(target+1)]
+        dp[0] = 1
 
         for i in range(1, n+1):
-            for j in range(0, target+1):
+            for j in range(target, -1, -1):
                 if j-nums[i-1] < 0:
-                    dp[i][j] = dp[i-1][j]
+                    continue
                 else:
-                    dp[i][j]  = dp[i-1][j] + dp[i-1][j-nums[i-1]]
-        return dp[n][target]
+                    dp[j]  = dp[j] + dp[j-nums[i-1]]
+        return dp[target]
 # @lc code=end
 

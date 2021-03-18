@@ -55,7 +55,59 @@
 #
 
 # @lc code=start
+from numpy.lib.arraysetops import intersect1d
+
+
 class Solution:
     def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
+        ## dp table 解法1
+        # m ----> 0
+        # n ----> 1
+        # s = len(strs)
+        # dp = [[[0] * (n + 1) for i in range(m + 1 )] for i in range(s + 1)]
+        # dict_help = {}
+        # for idx, string in enumerate(strs):
+        #     dict_help[(0, idx)] = string.count('0')
+        #     dict_help[(1, idx)] = string.count('1')
+        
+
+        # for i in range(1, s+1):
+        #     cnt_0 = dict_help[(0, i-1)]
+        #     cnt_1 = dict_help[(1, i-1)]
+        #     for j in range(m+1):
+        #         for k in range(n+1):
+        #             # dp[i-1][j][k]代表不放入当前的元素
+        #             if j-cnt_0 < 0 or k-cnt_1 < 0:
+        #                 dp[i][j][k] = dp[i-1][j][k]
+        #             else:
+        #                 dp[i][j][k] = max(dp[i-1][j][k],
+        #                             dp[i-1][j-cnt_0][k-cnt_1] + 1
+        #                             )
+        # return int(dp[s][m][n])
+
+        ## dp table 解法2
+        # m ----> 0
+        # n ----> 1
+        # 需要降维
+        s = len(strs)
+        dp = [[0] * (n + 1) for i in range(m + 1 )]
+        dict_help = {}
+        for idx, string in enumerate(strs):
+            dict_help[(0, idx)] = string.count('0')
+            dict_help[(1, idx)] = string.count('1')
+    
+        for i in range(1, s+1):
+            cnt_0 = dict_help[(0, i-1)]
+            cnt_1 = dict_help[(1, i-1)]
+            for j in range(m, -1, -1):
+                for k in range(n, -1, -1):
+                    # dp[i-1][j][k]代表不放入当前的元素
+                    if j-cnt_0 < 0 or k-cnt_1 < 0:
+                        continue
+                    else:
+                        dp[j][k] = max(dp[j][k],
+                                    dp[j-cnt_0][k-cnt_1] + 1
+                                    )
+        return dp[m][n]
 # @lc code=end
 
