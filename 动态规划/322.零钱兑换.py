@@ -88,16 +88,34 @@ class Solution:
     #         return memo[n]
     #     return dp(amount)
     
-    ## 迭代动态规划解法0
+    ## 迭代动态规划解法
     def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [amount+1 for _ in range(amount+1)]
+        n = len(coins)
+        max_value = amount+1
+        ## dp[i][j] 代表取前i个硬币凑出j的最小硬币数
+        ## 二维
+        # dp = [[max_value for _ in range(max_value)] for _ in range(n+1)]
+        # for i in range(n+1):
+        #     dp[i][0] = 0
+        # for i in range(1, n+1):
+        #     for j in range(1, max_value):
+        #         if j - coins[i-1] < 0:
+        #             dp[i][j] = dp[i - 1][j]
+        #             continue
+        #         dp[i][j] = min(dp[i-1][j], dp[i][j - coins[i-1]] + 1)
+        # res = dp[n][amount]
+        # return res if res != max_value else -1
+        ## 一维
+        dp = [max_value for _ in range(max_value)]
         dp[0] = 0
-        for i in range(len(dp)):
-            for coin in coins:
-                if i - coin < 0:
-                    continue
-                dp[i] = min(dp[i], 1+dp[i-coin])
-            
-        return dp[amount] if dp[amount] != amount+1 else -1
+
+        for coin in coins:
+            ## 二维不能直接这么写的原因：
+            # 二维的时候不像一维，当前行已经是上一轮的信息了
+            # 所以j - coins[i-1] < 0的时候还需要赋值 dp[i][j] = dp[i - 1][j]
+            for j in range(coin, max_value):
+                dp[j] = min(dp[j], dp[j-coin]+1)
+        res = dp[amount]
+        return res if res != max_value else -1
 # @lc code=end
 
