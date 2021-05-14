@@ -80,7 +80,7 @@ class Solution:
         def mergesort(nums, left, right):
             if left >= right:
                 return
-            mid = (left + right)//2
+            mid = left + (right-left)//2
             ## 分
             mergesort(nums, left, mid)
             mergesort(nums, mid+1, right)
@@ -105,14 +105,15 @@ class Solution:
                     break
         length = len(nums)
         ## 建最大堆
-        for i in range(length-1, -1, -1):
-            HeadAdjust(nums, i, length)
-        for j in range(length-1, -1, -1):
-            nums[0], nums[j] = nums[j], nums[0]
-            HeadAdjust(nums, 0, j)
+        # for i in range(length-1, -1, -1):
+        #     HeadAdjust(nums, i, length)
+        # ## 开始排序
+        # for j in range(length-1, -1, -1):
+        #     nums[0], nums[j] = nums[j], nums[0]
+        #     HeadAdjust(nums, 0, j)
 
         # quicksort(nums, 0, len(nums) - 1)
-        # mergesort(nums, 0, len(nums) - 1)
+        mergesort(nums, 0, len(nums) - 1)
         return nums
 # @lc code=end
 
